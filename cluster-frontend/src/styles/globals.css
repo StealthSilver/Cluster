@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  background: #0f0f0f;
+  color: #e0e0e0;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  background: #0f0f0f;
+  color: #e0e0e0;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c4a590;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #d4b5a0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Sora, sans-serif;
+  font-weight: 600;
+}
+
+button {
+  font-family: Inter, sans-serif;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+input, textarea {
+  font-family: Inter, sans-serif;
+}
