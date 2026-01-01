@@ -1,0 +1,54 @@
+import express from "express";
+import Post from "../models/Post.js";
+import { authMiddleware } from "../middleware/auth.js";
+const router = express.Router();
+router.post("/", authMiddleware, async (req, res) => {
+    try {
+        const { content, image, tribeId } = req.body;
+        const post = new Post({ content, image, tribeId, author: req.userId });
+        await post.save();
+        res.status(201).json(post);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to create post" });
+    }
+});
+router.get("/tribe/:tribeId", async (req, res) => {
+    try {
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const posts = await Post.find({ tribeId: req.params.tribeId })
+            .sort({ createdAt: -1 })
+            .skip((page - 1) * limit)
+            .limit(limit);
+        res.json(posts);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to fetch posts" });
+    }
+});
+router.get("/user/:userId", async (req, res) => {
+    try {
+        const posts = await Post.find({ author: req.params.userId }).sort({
+            createdAt: -1,
+        });
+        res.json(posts);
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to fetch posts" });
+    }
+});
+router.delete("/:id", authMiddleware, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (post?.author !== req.userId)
+            return res.status(403).json({ error: "Not authorized" });
+        await Post.findByIdAndDelete(req.params.id);
+        res.json({ message: "Post deleted" });
+    }
+    catch (error) {
+        res.status(500).json({ error: "Failed to delete post" });
+    }
+});
+export default router;
+//# sourceMappingURL=post.js.map
