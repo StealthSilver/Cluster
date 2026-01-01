@@ -1,420 +1,334 @@
-# Cluster - V1
+# Cluster - Relationship-Aware Social App
 
-A calm, relationship-aware social application with separate microservices architecture.
+A calm, intentional social platform designed for meaningful connections. Think before you share. Connect with purpose.
 
 ## 🎯 Overview
 
-Cluster is designed as a relationship-focused social platform where:
-- Users join public **Tribes** based on shared interests
-- Posts are shared **within tribes**, not broadcast globally
-- Users build **private closeness graphs** (Circles) with the people closest to them
-- A **global Cluster Map** shows the landscape of communities
-- **Notifications** are digest-based, not real-time alerts
+Cluster is a V1 social application built with modern technology stack. It combines:
+- **Unified Backend**: Single Express.js service with all features
+- **React Frontend**: Vite-powered, TypeScript, Tailwind CSS
+- **Landing Page**: Next.js with Framer Motion animations
 
 ## 🏗️ Architecture
 
-### Backend (7 Microservices)
-
-| Service | Port | Purpose |
-|---------|------|---------|
-| Auth Service | 3001 | User signup, login, JWT tokens |
-| User Service | 3002 | User profiles, bios, avatars |
-| Tribe Service | 3003 | Public interest groups |
-| Post Service | 3004 | Posts within tribes |
-| Circle Service | 3005 | Private closeness graphs |
-| Cluster Service | 3006 | Global cluster map |
-| Notification Service | 3007 | Digest notifications |
-
-### Frontend
-- **React App** (Port 3000): 8 main pages with protected routes
-- **Next.js Landing** (Port 3010): SEO-optimized homepage
-
-## ✨ Features
-
-✅ User authentication with JWT
-✅ User profiles with avatars and bios
-✅ Public tribes with join/leave
-✅ Posts within tribes (chronological, paginated)
-✅ Private circles with closeness scores (0-100)
-✅ Global cluster map view
-✅ Feed with light/deep reading modes
-✅ Explore and discover tribes
-✅ Direct messaging interface
-✅ Notification digest
-✅ Fully responsive design
-✅ Dark theme, calm aesthetic
-✅ No aggressive notifications or badges
-✅ Framer Motion animations
+```
+Cluster/
+├── cluster-backend/          # Unified Express backend (port 3001)
+│   ├── src/
+│   │   ├── models/           # MongoDB Mongoose models
+│   │   ├── routes/           # Express routes for all features
+│   │   ├── middleware/       # Auth & JWT middleware
+│   │   └── index.ts          # Main Express app
+│   └── package.json
+├── cluster-frontend/         # React app (port 3000)
+│   ├── src/
+│   │   ├── pages/            # Page components
+│   │   ├── components/       # Reusable components
+│   │   ├── services/         # API client
+│   │   ├── hooks/            # Custom hooks
+│   │   └── styles/           # Tailwind + globals
+│   └── package.json
+└── cluster-landing/          # Next.js landing (port 3010)
+    ├── app/
+    │   ├── page.tsx          # Home page
+    │   └── globals.css       # Global styles
+    └── package.json
+```
 
 ## 🚀 Quick Start
 
-### Prerequisites
-- Node.js 18+
-- MongoDB (local or Atlas)
-- npm or yarn
+### 1. Clone and Setup
 
-### 1. Setup MongoDB
 ```bash
-# Option A: Local MongoDB
-mongod
-
-# Option B: MongoDB Atlas
-# Sign up at https://mongodb.com/cloud
-# Get connection string and add to .env files
+git clone https://github.com/StealthSilver/Cluster.git
+cd Cluster
 ```
 
-### 2. Start Backend Services (7 terminals)
+### 2. Backend Setup
+
 ```bash
-# Terminal 1 - Auth Service
-cd cluster-backend/auth-service
-npm install
-npm run dev
+cd cluster-backend
 
-# Terminal 2 - User Service
-cd cluster-backend/user-service
+# Install dependencies
 npm install
-npm run dev
 
-# Terminal 3 - Tribe Service
-cd cluster-backend/tribe-service
-npm install
-npm run dev
+# Create .env file
+cp .env.example .env
 
-# Terminal 4 - Post Service
-cd cluster-backend/post-service
-npm install
-npm run dev
-
-# Terminal 5 - Circle Service
-cd cluster-backend/circle-service
-npm install
-npm run dev
-
-# Terminal 6 - Cluster Service
-cd cluster-backend/cluster-service
-npm install
-npm run dev
-
-# Terminal 7 - Notification Service
-cd cluster-backend/notification-service
-npm install
+# Start the server
 npm run dev
 ```
 
-### 3. Start Frontend
+Backend runs on `http://localhost:3001`
+
+### 3. Frontend Setup
+
 ```bash
 cd cluster-frontend
+
+# Install dependencies
 npm install
+
+# Create .env.local
+cp .env.example .env.local
+
+# Start dev server
 npm run dev
 ```
 
-### 4. Visit
-- **App**: http://localhost:3000
-- **Landing** (optional): http://localhost:3010
+Frontend runs on `http://localhost:3000`
 
-## 📚 API Documentation
+### 4. Landing Page (Optional)
 
-### Auth Service (3001)
+```bash
+cd cluster-landing
 
-```
-POST /api/auth/signup
-{
-  "email": "user@example.com",
-  "password": "secure",
-  "name": "John Doe"
-}
-Response: { user, accessToken, refreshToken }
+# Install dependencies
+npm install
 
-POST /api/auth/login
-{
-  "email": "user@example.com",
-  "password": "secure"
-}
-Response: { user, accessToken, refreshToken }
-
-POST /api/auth/refresh
-{
-  "refreshToken": "..."
-}
-Response: { accessToken, refreshToken }
-
-GET /api/auth/me
-Authorization: Bearer {token}
-Response: User object
+# Start dev server
+npm run dev
 ```
 
-### User Service (3002)
+Landing page runs on `http://localhost:3010`
 
-```
-GET /api/profiles/me
-Authorization: Bearer {token}
-Response: UserProfile
+## 📋 Features Implemented
 
-GET /api/profiles/:userId
-Response: UserProfile
+✅ **Authentication**
+- User signup with email, password, name
+- Login with email & password
+- JWT token generation (15m access, 7d refresh)
+- Protected routes
 
-PUT /api/profiles/me/bio
-Authorization: Bearer {token}
-{ "bio": "..." }
+✅ **User Profiles**
+- Profile management (avatar, bio)
+- Activity tracking (posts, tribes)
+- Join/leave tribes
 
-PUT /api/profiles/me/avatar
-Authorization: Bearer {token}
-{ "avatar": "😊" }
+✅ **Tribes (Communities)**
+- Create and discover public tribes
+- Join/leave tribes
+- Browse by category (sports, tech, art, wellness, learning)
+- Search functionality
 
-POST /api/profiles/me/join-tribe/:tribeId
-Authorization: Bearer {token}
+✅ **Posts**
+- Create text/image posts in tribes
+- Chronological feed
+- Pagination support
+- Author-only deletion
 
-POST /api/profiles/me/leave-tribe/:tribeId
-Authorization: Bearer {token}
-```
+✅ **Circles (Private)**
+- Private relationship graph
+- Closeness scoring (0-100)
+- Add/update/remove connections
+- No public exposure
 
-### Tribe Service (3003)
+✅ **Cluster Map**
+- Global view of all tribes
+- Circle view of close connections
+- Two-mode navigation
 
-```
-GET /api/tribes
-Response: [Tribe...]
+✅ **Notifications**
+- Digest-based (not real-time)
+- Types: mentions, replies, tribe activity
+- Read/unread tracking
+- Pagination
 
-POST /api/tribes
-Authorization: Bearer {token}
-{ "name": "...", "description": "...", "category": "..." }
+✅ **Messages**
+- 1:1 conversation UI
+- Minimal, calm design
 
-GET /api/tribes/:id
-Response: Tribe
-
-POST /api/tribes/:id/join
-Authorization: Bearer {token}
-
-POST /api/tribes/:id/leave
-Authorization: Bearer {token}
-
-GET /api/tribes/search/:query
-Response: [Tribe...]
-```
-
-### Post Service (3004)
-
-```
-POST /api/posts
-Authorization: Bearer {token}
-{ "content": "...", "image": "...", "tribeId": "..." }
-
-GET /api/posts/tribe/:tribeId?page=1&limit=10
-Response: [Post...]
-
-GET /api/posts/user/:userId
-Response: [Post...]
-
-DELETE /api/posts/:id
-Authorization: Bearer {token}
-```
-
-### Circle Service (3005)
-
-```
-GET /api/circles/me
-Authorization: Bearer {token}
-Response: Circle with connections
-
-POST /api/circles/add
-Authorization: Bearer {token}
-{ "personId": "..." }
-
-PUT /api/circles/update/:personId
-Authorization: Bearer {token}
-{ "closenessScore": 75 }
-
-DELETE /api/circles/remove/:personId
-Authorization: Bearer {token}
-```
-
-### Cluster Service (3006)
-
-```
-GET /api/cluster/config
-Response: { version, tribes: [...] }
-
-GET /api/cluster/global-view
-Authorization: Bearer {token}
-Response: { clusters: [...], total }
-```
-
-### Notification Service (3007)
-
-```
-GET /api/notifications?page=1&limit=10
-Authorization: Bearer {token}
-Response: [Notification...]
-
-POST /api/notifications
-{ "userId": "...", "type": "mention|reply|tribe_activity", "content": "..." }
-
-PUT /api/notifications/:id/read
-Authorization: Bearer {token}
-
-PUT /api/notifications/read-all
-Authorization: Bearer {token}
-
-DELETE /api/notifications/:id
-Authorization: Bearer {token}
-```
-
-## 🔐 Authentication
-
-All services use JWT token authentication:
-1. User signs up/logs in via Auth Service
-2. Receives `accessToken` (15 min) and `refreshToken` (7 days)
-3. Frontend includes `Authorization: Bearer {token}` on all requests
-4. Services validate token via middleware
-5. Use refresh token to get new access token
-
-## 🎨 Design Philosophy
-
-- **Dark Theme**: #0f0f0f background with warm accents (#c4a590)
-- **Calm Aesthetic**: No aggressive colors, no blue/purple
-- **Spacious**: Plenty of breathing room, minimal clutter
-- **Human-Centered**: No dopamine-driven UI elements
-- **No Badges**: No red notifications, no engagement metrics
-- **Intentional**: Slow, thoughtful interactions
-
-## 📁 Project Structure
-
-```
-Cluster/
-├── cluster-backend/
-│   ├── auth-service/
-│   ├── user-service/
-│   ├── tribe-service/
-│   ├── post-service/
-│   ├── circle-service/
-│   ├── cluster-service/
-│   └── notification-service/
-├── cluster-frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   ├── components/
-│   │   ├── layouts/
-│   │   ├── services/
-│   │   ├── hooks/
-│   │   └── styles/
-│   └── index.html
-├── cluster-landing/
-│   ├── app/
-│   ├── components/
-│   └── styles/
-└── README.md
-```
+✅ **Other Features**
+- Dark theme design
+- Calm UI (no aggressive metrics)
+- Responsive layout
+- Framer Motion animations
 
 ## 🛠️ Tech Stack
 
 ### Backend
-- Node.js + Express
-- TypeScript
-- MongoDB + Mongoose
-- JWT authentication
-- Bcryptjs for password hashing
+- **Framework**: Express.js 4.18.2
+- **Runtime**: Node.js 18+
+- **Language**: TypeScript 5.1.6
+- **Database**: MongoDB + Mongoose 7.5
+- **Auth**: JWT + bcryptjs
+- **API**: REST
 
 ### Frontend
-- React 18 + TypeScript
-- Vite (bundler)
-- React Router (navigation)
-- Zustand (state management)
-- Tailwind CSS (styling)
-- Framer Motion (animations)
-- Axios (HTTP client)
+- **Framework**: React 18.2
+- **Build Tool**: Vite 4.4.9
+- **Language**: TypeScript 5.1.6
+- **Styling**: Tailwind CSS 3.3.3
+- **Animations**: Framer Motion 10.16.4
+- **State**: Zustand 4.4.1
+- **HTTP**: Axios 1.5.0
 
 ### Landing Page
-- Next.js 14
-- TypeScript
-- Tailwind CSS
-- Framer Motion
+- **Framework**: Next.js 14.0
+- **Language**: TypeScript 5.1.6
+- **Styling**: Tailwind CSS 3.3.3
+- **Animations**: Framer Motion 10.16.4
 
-## 📝 Environment Variables
+## 📚 API Endpoints
 
-Each service needs a `.env` file (see `.env.example`):
+### All endpoints run on `/api/` prefix on port 3001
 
+**Auth**
+- `POST /auth/signup` - Create account
+- `POST /auth/login` - Login
+- `POST /auth/refresh` - Refresh token
+- `GET /auth/me` - Get current user
+
+**Profiles**
+- `GET /profiles/me` - Your profile
+- `GET /profiles/:userId` - Any profile
+- `PUT /profiles/me/bio` - Update bio
+- `PUT /profiles/me/avatar` - Update avatar
+
+**Tribes**
+- `GET /tribes` - All tribes
+- `POST /tribes` - Create tribe
+- `GET /tribes/:id` - Tribe details
+- `POST /tribes/:id/join` - Join
+- `POST /tribes/:id/leave` - Leave
+- `GET /tribes/search/:query` - Search
+
+**Posts**
+- `GET /posts/tribe/:tribeId` - Tribe posts
+- `GET /posts/user/:userId` - User posts
+- `POST /posts` - Create
+- `DELETE /posts/:id` - Delete (author only)
+
+**Circles**
+- `GET /circles/me` - Your circle
+- `POST /circles/add` - Add connection
+- `PUT /circles/update/:personId` - Update closeness
+- `DELETE /circles/remove/:personId` - Remove
+
+**Cluster**
+- `GET /cluster/config` - Configuration
+- `GET /cluster/global-view` - Global clusters
+
+**Notifications**
+- `GET /notifications` - Your notifications
+- `POST /notifications` - Create
+- `PUT /notifications/:id/read` - Mark read
+- `PUT /notifications/read-all` - Mark all read
+- `DELETE /notifications/:id` - Delete
+
+## 🎨 Design System
+
+### Colors
+- **Dark Background**: #0f0f0f
+- **Warm Accent**: #c4a590
+- **Sage Green**: #9ca98a
+- ❌ No blue or purple
+
+### Typography
+- **Headings**: Sora (600-700 weight)
+- **Body**: Inter (400-500 weight)
+
+### Philosophy
+- Calm, spacious design
+- No aggressive metrics or badges
+- Intentional interactions
+- Dark theme throughout
+- Soft, smooth animations
+
+## 🔐 Security
+
+- Passwords hashed with bcryptjs (10 rounds)
+- JWT signature verification
+- Auth middleware on protected routes
+- CORS enabled
+- Input validation on all routes
+- No sensitive data in localStorage (tokens only)
+
+## 📦 Database
+
+Single MongoDB instance with collections:
+- `users` - Authentication & user accounts
+- `userprofiles` - Profile data
+- `tribes` - Communities
+- `posts` - Posts in tribes
+- `circles` - Relationship graphs
+- `notifications` - User notifications
+
+## 🚀 Deployment
+
+### Backend (Node.js)
+- Recommended: Railway, Render, Heroku
+- Set environment variables
+- Connect to MongoDB Atlas
+- Deploy `dist/` folder (after npm run build)
+
+### Frontend (React)
+- Recommended: Vercel, Netlify
+- Environment variables for API URLs
+- Simple `npm run build && npm start`
+
+### Landing Page (Next.js)
+- Recommended: Vercel (native support)
+- Same process as other Next.js apps
+
+## 📖 Environment Variables
+
+### Backend (.env)
 ```
 PORT=3001
-MONGODB_URI=mongodb://localhost:27017/cluster-auth
-JWT_SECRET=your_super_secret_key_change_in_production
+MONGODB_URI=mongodb://localhost:27017/cluster
+JWT_SECRET=your_secret_here
 JWT_EXPIRE=15m
 JWT_REFRESH_EXPIRE=7d
 NODE_ENV=development
 ```
 
-**Important**: Change `JWT_SECRET` to a strong random string in production and keep it consistent across all services.
+### Frontend (.env.local)
+```
+VITE_AUTH_SERVICE=http://localhost:3001
+VITE_USER_SERVICE=http://localhost:3001
+VITE_TRIBE_SERVICE=http://localhost:3001
+VITE_POST_SERVICE=http://localhost:3001
+VITE_CIRCLE_SERVICE=http://localhost:3001
+VITE_CLUSTER_SERVICE=http://localhost:3001
+VITE_NOTIFICATION_SERVICE=http://localhost:3001
+```
 
-## 🚢 Deployment
+## 🧪 Testing the App
 
-### Backend Services
-Recommended platforms: Railway, Render, Heroku, AWS
+1. **Signup**: Create account at `/signup`
+2. **Login**: Login with credentials at `/login`
+3. **Explore**: Browse tribes at `/tribes`
+4. **Create**: Post in tribes from `/feed`
+5. **Connect**: Add people to your circle
+6. **Discover**: Search for tribes at `/explore`
+7. **Notify**: Check notifications
 
-1. Create environment on platform
-2. Set environment variables (including strong JWT_SECRET)
-3. Connect MongoDB (Atlas recommended)
-4. Deploy each service to separate apps/containers
+## 📝 Project Structure
 
-### Frontend
-Deploy to Vercel, Netlify, or Docker
-
-### Landing Page
-Deploy to Vercel (native Next.js support)
-
-## 📊 Database Schema
-
-Each service has its own MongoDB database:
-
-**Auth Service**: User (email, password hash, name, createdAt)
-**User Service**: UserProfile (userId, avatar, bio, joinedTribes, activitySummary)
-**Tribe Service**: Tribe (name, description, category, members, createdBy, createdAt)
-**Post Service**: Post (content, image, author, tribeId, createdAt)
-**Circle Service**: Circle (userId, connections: [{personId, closenessScore}])
-**Notification Service**: Notification (userId, type, content, relatedId, read, createdAt)
-
-## 🔒 Security Features
-
-- Password hashing with bcryptjs (10 rounds)
-- JWT signature verification
-- Auth middleware on protected routes
-- CORS configuration
-- Environment-based secrets
-- No sensitive data in localStorage (tokens only)
-- Input validation on all routes
-
-## 🧪 Testing
-
-Each service can be tested via:
-- Frontend dev console (Network tab)
-- Postman or REST Client
-- curl commands
-
-## 📈 Performance Considerations
-
-- MongoDB indexes on frequently queried fields
-- Pagination support for large lists
-- Service isolation allows independent scaling
-- Stateless services for horizontal scaling
-- Token caching in localStorage
-
-## 🔗 Related Links
-
-- [Frontend README](./cluster-frontend/README.md)
-- [Landing Page README](./cluster-landing/README.md)
-- [Setup Guide](./SETUP.md)
-
-## 📄 License
-
-This project is open source.
+```
+src/
+├── backend/          # Express + MongoDB
+├── frontend/         # React + Vite
+└── landing/          # Next.js
+```
 
 ## 🤝 Contributing
 
-Contributions welcome! Please ensure:
-- TypeScript strict mode compliance
-- Proper error handling
-- Clear commit messages
-- Updated documentation
+This is a solo V1 project. For modifications:
+1. Create feature branch
+2. Make changes
+3. Test locally
+4. Push to GitHub
+
+## 📄 License
+
+ISC
+
+## 🙋 Support
+
+For issues or questions, check the backend and frontend README files for detailed information.
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: January 2024
-**Status**: Production Ready
+**Cluster V1** - Think before you share. Connect with intention. 🌍
